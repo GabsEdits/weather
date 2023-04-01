@@ -6,10 +6,9 @@
 		
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
-		
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
 		<link href="/styles/common.css" rel="stylesheet">
-		
+
 		<style>
 			body {
 				display: flex;
@@ -24,13 +23,16 @@
 				background-color: #F06842;
 				background-attachment: fixed;
 			}
-			
+
+			* {
+  				color: #191515;
+				}
+
 			.page-wrapper {
 				flex-grow: 1;
 				min-width: 0;
-				max-width: 30em;
+				max-width: 34em;
 				padding: 1em 2em;
-				border: solid 2px #FFF1F3;
 				border-radius: 1em;
 				background-color: #FFF1F3;
 			}
@@ -70,12 +72,6 @@
 				margin-right: 1rem;
 			}
 			
-			.secret-link-container {
-				float: right;
-				cursor: default;
-				opacity: 0;
-			}
-			
 			#place {
 				font-size: 1.5em;
 				font-weight: bold;
@@ -84,12 +80,7 @@
 			#temperature {
 				font-size: 5em;
 				font-weight: bold;
-			}
-			
-			.misc {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
+				font-family: Montserrat;
 			}
 			
 			#map {
@@ -101,9 +92,7 @@
 				background: #0000003f;
 			}
 		</style>
-		
-		<script src="/scripts/licensing.js" type="module"></script>
-		
+
 		<script type="module">
 			function showWeather(data) {
 				const
@@ -176,18 +165,16 @@
 	
 	<body>
 		<div class="page-wrapper">
-			<div class="secret-link-container">
-				<a href="/0017-subpixels/" class="secret-link" tabindex="-1">→</a>
-			</div>
 			
 			<div id="placeholder">Loading the weather...</div>
 			
 			<div id="weather" hidden>
-				<div id="place">Moscow, Russia</div>
+				<div id="place">Chisinau, Moldova</div>
 				<div id="status">Clear</div>
 				
 				<div class="two-column">
-					<div id="temperature">69°C</div>
+					<div id="temperature">0°C</div>
+
 				<iframe id="map"></iframe>
 				
 				<p>Weather data courtesy of <a href="https://wttr.in/">wttr.in</a>.</p>
