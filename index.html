@@ -3,13 +3,18 @@
 <html lang="en-us">
 	<head>
 		<title>Weather</title>
-		
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
-		<link href="/styles/common.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+		<link href="https://bruh.ltd/styles/common.css" rel="stylesheet">
 
 		<style>
+				@charset "utf-8";
+
+				*, *::before, *::after {
+				box-sizing: border-box;
+				}
 			body {
 				display: flex;
 				align-items: center;
@@ -20,7 +25,7 @@
 				margin: 0;
 				font-size: 15pt;
 				font-family: "Zilla Slab", Medium;
-				background-color: #F06842;
+				background-color: #F17755;
 				background-attachment: fixed;
 			}
 
@@ -79,8 +84,8 @@
 			
 			#temperature {
 				font-size: 5em;
-				font-weight: bold;
-				font-family: Montserrat;
+				font-weight: 750;
+				font-family: 'Inter', sans-serif;
 			}
 			
 			#map {
@@ -93,74 +98,90 @@
 			}
 		</style>
 
-		<script type="module">
-			function showWeather(data) {
-				const
-					placeholder = document.querySelector("#placeholder"),
-					weather = document.querySelector("#weather"),
-					
-					place = document.querySelector("#place"),
-					status = document.querySelector("#status"),
-					
-					temperature = document.querySelector("#temperature"),
-					map = document.querySelector("#map");
-				
-				place.innerText =
-					data.nearest_area[0].areaName[0].value + ", " +
-					data.nearest_area[0].country[0].value;
-				status.innerText = data.current_condition[0].weatherDesc[0].value;
-				
-				temperature.innerText = `${data.current_condition[0].temp_C}°C`;
-				map.src =
-					"https://www.openstreetmap.org/export/embed.html?" +
-					"marker=" +
-						`${data.nearest_area[0].latitude},` +
-						`${data.nearest_area[0].longitude}&` +
-					`layer=cyclemap`;
-				
-				placeholder.hidden = true;
-				weather.hidden = false;
-			}
-			
-			function fetchWeather() {
-				fetch("https://wttr.in/?format=j1")
-					.then((response) => response.json())
-					.then((data) => {
-						localStorage.setItem("last-update", (new Date()).toISOString());
-						localStorage.setItem("weather", JSON.stringify(data));
-						
-						showWeather(data);
-					})
-					
-					.catch((error) => {
-						alert(error);
-					});
-			}
-			
-			const
-				currentTime = new Date(),
-				lastUpdateTime = new Date(localStorage.getItem("last-update"));
-			
-			if (lastUpdateTime && currentTime - lastUpdateTime < 600000) {
-				const rawData = localStorage.getItem("weather");
-				
-				let data = null;
-				
-				try {
-					data = JSON.parse(rawData);
-				} catch (error) {
-					alert(error);
-				}
-				
-				if (data) {
-					showWeather(data);
-				} else {
-					fetchWeather();
-				}
-			} else {
-				fetchWeather();
-			}
-		</script>
+<script type="module">
+	import config from './config.js';
+	function showWeather(data) {
+	  const
+		placeholder = document.querySelector("#placeholder"),
+		weather = document.querySelector("#weather"),
+  
+		place = document.querySelector("#place"),
+		status = document.querySelector("#status"),
+  
+		temperature = document.querySelector("#temperature"),
+		map = document.querySelector("#map");
+  
+	  place.innerText = data.name + ", " + data.sys.country;
+	  status.innerText = data.weather[0].description;
+  
+	  temperature.innerText = `${Math.ceil(data.main.temp)}°C`;
+	  map.src =
+		"https://www.openstreetmap.org/export/embed.html?" +
+		"marker=" +
+		`${data.coord.lat},` +
+		`${data.coord.lon}&` +
+		`layer=cyclemap`;
+  
+	  placeholder.hidden = true;
+	  weather.hidden = false;
+	}
+  
+	function fetchWeather(lat, lon) {
+		const apiKey = config.apiKey;
+		const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
+	  fetch(apiUrl)
+		.then((response) => response.json())
+		.then((data) => {
+		  localStorage.setItem("last-update", (new Date()).toISOString());
+		  localStorage.setItem("weather", JSON.stringify(data));
+		  showWeather(data);
+		})
+		.catch((error) => {
+		  alert(error);
+		});
+	}
+  
+	const currentTime = new Date();
+	const lastUpdateTime = new Date(localStorage.getItem("last-update"));
+  
+	if (lastUpdateTime && currentTime - lastUpdateTime < 600000) {
+	  const rawData = localStorage.getItem("weather");
+  
+	  let data = null;
+  
+	  try {
+		data = JSON.parse(rawData);
+	  } catch (error) {
+		alert(error);
+	  }
+  
+	  if (data) {
+		showWeather(data);
+	  } else {
+		navigator.geolocation.getCurrentPosition(
+		  (position) => {
+			const lat = position.coords.latitude;
+			const lon = position.coords.longitude;
+			fetchWeather(lat, lon);
+		  },
+		  (error) => {
+			alert(error.message);
+		  }
+		);
+	  }
+	} else {
+	  navigator.geolocation.getCurrentPosition(
+		(position) => {
+		  const lat = position.coords.latitude;
+		  const lon = position.coords.longitude;
+		  fetchWeather(lat, lon);
+		},
+		(error) => {
+		  alert(error.message);
+		}
+	  );
+	}
+  </script>  
 	</head>
 	
 	<body>
