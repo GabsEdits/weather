@@ -99,7 +99,6 @@
 		</style>
 
 <script type="module">
-	import config from './config.js';
 	function showWeather(data) {
 	  const
 		placeholder = document.querySelector("#placeholder"),
@@ -127,7 +126,7 @@
 	}
   
 	function fetchWeather(lat, lon) {
-		const apiKey = config.apiKey;
+		const apiKey = process.env.API_KEY;
 		const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
 	  fetch(apiUrl)
 		.then((response) => response.json())
@@ -181,6 +180,7 @@
 		}
 	  );
 	}
+	require('dotenv').config();
   </script>  
 	</head>
 	
@@ -198,7 +198,7 @@
 
 				<iframe id="map"></iframe>
 				
-				<p>Weather data courtesy of <a href="https://wttr.in/">wttr.in</a>.</p>
+				<p>Weather data courtesy of <a href="https://openweathermap.org/">openweathermap</a>.</p>
 			</div>
 		</div>
 	</body>
