@@ -7,6 +7,4 @@
  ## Credits
  * Most of the code was made by [bruh.ltd](https://bruh.ltd) and I just edited it to my likings
  
- <div align="center">
-  <sup> Thanks for checking out my website 👋</sup>
-  </div>
+  <sup align="center"> Thanks for checking out my website 👋</sup>
