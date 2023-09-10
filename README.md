@@ -6,8 +6,11 @@
  
  ## Credits
  * Most of the code was made by [bruh.ltd](https://bruh.ltd) and I just edited it to my likings
+
+>**Important**
+>The Website isn't working at the moment
+
  
 <div align="center">
-  <p><b>The Website isn't working at the moment</b></p>
 <sup> Thanks for checking out my website 👋</sup>
 </div>
